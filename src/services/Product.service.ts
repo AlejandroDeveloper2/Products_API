@@ -55,5 +55,60 @@ class ProductService {
       );
     }
   }
+
+  public async findProductsByCategory(
+    productCategory: string
+  ): Promise<Product[]> {
+    try {
+      const products: Product[] = await prismaClient.product.findMany({
+        where: { category: productCategory },
+      });
+      return products;
+    } catch (error) {
+      return handlePrismaError(
+        error,
+        `Ha ocurrido un error al intentar obtener los productos de la categoria ${productCategory}`,
+        {}
+      );
+    }
+  }
+
+  public async modifyProduct(
+    productId: number,
+    product: Product
+  ): Promise<Product> {
+    try {
+      const updatedProduct: Product = await prismaClient.product.update({
+        where: { id: productId },
+        data: product,
+      });
+      return updatedProduct;
+    } catch (error) {
+      return handlePrismaError(
+        error,
+        `Ha ocurrido un error al intentar actualizar el producto con el id: ${productId}`,
+        {
+          notFoundMessage: `No existe un producto con el id: ${productId}`,
+        }
+      );
+    }
+  }
+
+  public async removeProductById(productId: number): Promise<Product> {
+    try {
+      const deletedProduct: Product = await prismaClient.product.delete({
+        where: { id: productId },
+      });
+      return deletedProduct;
+    } catch (error) {
+      return handlePrismaError(
+        error,
+        `Ha ocurrido un error al intentar eliminar el producto con el id: ${productId}`,
+        {
+          notFoundMessage: `No existe un producto con el id: ${productId}`,
+        }
+      );
+    }
+  }
 }
 export default ProductService;
