@@ -97,7 +97,10 @@
 			"strict":  true,
 			"skipLibCheck":  true,
 			"resolveJsonModule":  true,
-	   }
+	   },
+      "ts-node": {
+         "require": ["tsconfig-paths/register"]
+      }
    }
    ```
 3. **Configuración del script para ejecutar el proyecto en modo desarrollo en el archivo package.json :**

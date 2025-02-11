@@ -2,11 +2,17 @@ import prismaClient from "@config/PrismaClient";
 
 import { Product } from "@models/Product.model";
 
-import { AppError, handlePrismaError } from "@utils/index";
+import { AppError, handlePrismaError, hasAllProperties } from "@utils/index";
 
 class ProductService {
   public async createNewProduct(product: Product): Promise<Product> {
     try {
+      if (!hasAllProperties(product)) {
+        throw new AppError(
+          400,
+          "Faltan propiedades del producto que son obligatorias"
+        );
+      }
       const newProduct: Product = await prismaClient.product.create({
         data: product,
       });
@@ -78,6 +84,12 @@ class ProductService {
     product: Product
   ): Promise<Product> {
     try {
+      if (!hasAllProperties(product)) {
+        throw new AppError(
+          400,
+          "Faltan propiedades del producto que son obligatorias"
+        );
+      }
       const updatedProduct: Product = await prismaClient.product.update({
         where: { id: productId },
         data: product,

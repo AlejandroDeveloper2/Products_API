@@ -13,12 +13,12 @@ export const handlePrismaError = (
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     switch (error.code) {
       case "P2002":
-        throw new AppError(400, notFoundMessage ? notFoundMessage : "");
-      case "P2025":
         throw new AppError(
-          404,
+          400,
           duplicatedRecordMessage ? duplicatedRecordMessage : ""
         );
+      case "P2025":
+        throw new AppError(404, notFoundMessage ? notFoundMessage : "");
       default:
         throw new AppError(500, defaultMessage);
     }
