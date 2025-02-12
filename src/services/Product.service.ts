@@ -69,8 +69,12 @@ class ProductService {
       const products: Product[] = await prismaClient.product.findMany({
         where: { category: productCategory },
       });
+      if (products.length === 0)
+        throw new AppError(400, `La categoria ${productCategory} no existe`);
+
       return products;
     } catch (error) {
+      console.log(error);
       return handlePrismaError(
         error,
         `Ha ocurrido un error al intentar obtener los productos de la categoria ${productCategory}`,

@@ -9,6 +9,9 @@ const productController = new ProductController();
 ProductsRouter.post("/products", productController.postProduct)
   .get("/products/:productId", productController.getProductById)
   .get("/products", productController.getProducts)
-  .get("/products/:productCategory", productController.getProductsByCategory)
+  .get(
+    "/products/category/:productCategory",
+    productController.getProductsByCategory
+  )
   .put("/products/:productId", productController.putProduct)
   .delete("/products/:productId", productController.deleteProductById);
