@@ -1,0 +1,529 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Productos",
+    "description": "API para gestionar productos con operaciones CRUD.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Obtener todos los productos",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de productos obtenida exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Productos obtenidos correctamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al obtener la lista de productos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Ha ocurrido un error al intentar obtener los productos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo producto",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Producto creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Product",
+                      "description": "Producto creado"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Producto agregado correctamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error de Registro duplicado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "¡Ya existe un producto con ese nombre en la base de datos!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al crear el nuevo producto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Ha ocurrido un error al intentar guardar el producto"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "summary": "Obtener un producto por ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Producto obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Product"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Producto obtenido correctamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error Producto no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "¡No se encuentra ningún producto con el id: ${productId}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al obtener producto por Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Ha ocurrido un error al intentar obtener el producto"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar un producto por ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Producto actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Product",
+                      "description": "Producto actualizado"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Producto actualizado correctamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error Producto no encontrado o id incorrecto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No existe un producto con el id: ${productId}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al actualizar el producto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Ha ocurrido un error al intentar actualizar el producto con el id: ${productId}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar un producto por ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Producto eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/Product",
+                      "description": "Producto eliminado"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Producto eliminado correctamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error Producto no encontrado o id incorrecto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No existe un producto con el id: ${productId}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al eliminar el producto por Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Ha ocurrido un error al intentar eliminar el producto con el id: ${productId}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/category/{productCategory}": {
+      "get": {
+        "summary": "Obtener productos por categoría",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productCategory",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Productos obtenidos exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Productos obtenidos correctamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al obtener productos por categoria inexistente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "La categoria ${productCategory} no existe"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error al obtener productos por categoria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string",
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Ha ocurrido un error al intentar obtener los productos de la categoria ${productCategory}"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Café Arabica"
+          },
+          "stock": {
+            "type": "integer",
+            "example": 100
+          },
+          "price": {
+            "type": "number",
+            "format": "float",
+            "example": 9.99
+          },
+          "category": {
+            "type": "string",
+            "example": "Café"
+          },
+          "description": {
+            "type": "string",
+            "example": "Café de alta calidad cultivado en Colombia"
+          }
+        }
+      }
+    }
+  }
+}

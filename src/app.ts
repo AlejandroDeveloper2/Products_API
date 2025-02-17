@@ -1,8 +1,11 @@
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 
 import { ProductsRouter } from "@routes/products.route";
 import errorHandle from "@middleware/errorHandler";
+
+import swaggerProductsApi from "./swagger/swaggerProductsApi.json";
 
 const app = express();
 
@@ -21,5 +24,8 @@ app.use(ProductsRouter);
 
 /** Usamos el middleware de errores */
 app.use(errorHandle);
+
+/** Declarar un endpoint global para a nuestra documentación en swagger */
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerProductsApi));
 
 export default app;
